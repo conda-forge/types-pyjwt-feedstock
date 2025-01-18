@@ -7,23 +7,26 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/types-PyJWT-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/types-PyJWT-{{ version }}.tar.gz
   sha256: 99c1a0d94d370951f9c6e57b1c369be280b2cbfab72c0f9c0998707490f015c9
 
 build:
-  number: 0
+  number: 1
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
+    - python {{ python_min }}
+    - setuptools
     - pip
-    - python >=3.6
   run:
-    - python >=3.6
+    - python >={{ python_min }}
     - types-cryptography
 
 test:
+  requires:
+    - python {{ python_min }}
   commands:
     - test -f $SP_DIR/jwt-stubs/__init__.pyi
 
